@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hasil pencarian tiket kereta api KAI, KRL, LRT, dan MRT. Temukan tiket terbaik untuk perjalanan Anda!">
+    <title>KAI - Hasil Pencarian Tiket</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --kai-blue: #003087;
+            --kai-red: #D81F2A;
+            --kai-gray: #E8ECF1;
+            --kai-yellow: #FFC107;
+            --kai-white: #FFFFFF;
+            --kai-pink: #ff0080;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --high-contrast-bg: #000000;
+            --high-contrast-text: #FFFFFF;
+            --high-contrast-link: #FFFF00;
+            --high-contrast-button-bg: #333333;
+            --high-contrast-border: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--kai-gray) 0%, #F5F7FA 100%);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        body.high-contrast {
+            background: var(--high-contrast-bg) !important;
+            color: var(--high-contrast-text) !important;
+        }
+
+        body.high-contrast * {
+            background: var(--high-contrast-bg) !important;
+            color: var(--high-contrast-text) !important;
+            border-color: var(--high-contrast-border) !important;
+        }
+
+        body.high-contrast a {
+            color: var(--high-contrast-link) !important;
+        }
+
+        body.high-contrast button,
+        body.high-contrast input,
+        body.high-contrast select {
+            background: var(--high-contrast-button-bg) !important;
+            color: var(--high-contrast-text) !important;
+            border: 2px solid var(--high-contrast-border) !important;
+        }
+
+        body.high-contrast .btn-signin,
+        body.high-contrast .btn-search,
+        body.high-contrast .trip-btn,
+        body.high-contrast .promo-banner,
+        body.high-contrast header,
+        body.high-contrast footer,
+        body.high-contrast .booking-card,
+        body.high-contrast .sort-btn,
+        body.high-contrast .ticket-card {
+            background: var(--high-contrast-bg) !important;
+            color: var(--high-contrast-text) !important;
+            border-color: var(--high-contrast-border) !important;
+        }
+
+        body.high-contrast .highlight {
+            color: var(--high-contrast-link) !important;
+        }
+
+        body.large-text {
+            font-size: 20px !important;
+        }
+
+        body.large-text * {
+            font-size: inherit !important;
+        }
+
+        body.large-text h1 {
+            font-size: 3em !important;
+        }
+
+        body.large-text h2 {
+            font-size: 2.5em !important;
+        }
+
+        body.large-text p,
+        body.large-text label,
+        body.large-text input,
+        body.large-text button,
+        body.large-text select {
+            font-size: 1.25em !important;
+        }
+
+        .promo-banner {
+            background: linear-gradient(90deg, var(--kai-blue) 0%, var(--kai-red) 100%);
+            color: var(--kai-white);
+            text-align: center;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        header {
+            background: var(--kai-white);
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--kai-blue);
+        }
+
+        .logo img {
+            height: 40px;
+            margin-left: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .logo img {
+                height: 30px;
+                margin-left: 10px;
+                width: 70px;
+            }
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        nav a:hover, nav a:focus {
+            color: var(--kai-yellow);
+            outline: 2px solid var(--kai-blue);
+        }
+
+        .btn-signin {
+            background: var(--kai-yellow);
+            color: var(--kai-white);
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-signin:hover, .btn-signin:focus {
+            background: var(--kai-red);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            outline: 2px solid var(--kai-blue);
+        }
+
+        .search-section {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+
+        .booking-card {
+            background: var(--kai-white);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #f8f9fa;
+            transition: var(--transition);
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: 2px solid var(--kai-blue);
+            border-color: var(--kai-blue);
+            background: var(--kai-white);
+        }
+
+        .autocomplete-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--kai-white);
+            border: 2px solid #e0e0e0;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .autocomplete-suggestion {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+
+        .autocomplete-suggestion:hover, .autocomplete-suggestion:focus {
+            background: #f0f8ff;
+            outline: 2px solid var(--kai-blue);
+        }
+
+        .autocomplete-suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .trip-type {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .trip-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            background: var(--kai-white);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        .trip-btn.active {
+            background: #E6F0FA;
+            border-color: var(--kai-blue);
+            color: var(--kai-blue);
+            font-weight: 600;
+        }
+
+        .trip-btn:focus {
+            outline: 2px solid var(--kai-blue);
+        }
+
+        .btn-search {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--kai-blue) 0%, var(--kai-red) 100%);
+            color: var(--kai-white);
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-search:hover, .btn-search:focus {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+            outline: 2px solid var(--kai-white);
+        }
+
+        .sort-section {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .sort-btn {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            background: var(--kai-white);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        .sort-btn.active {
+            background: #E6F0FA;
+            border-color: var(--kai-blue);
+            color: var(--kai-blue);
+            font-weight: 600;
+        }
+
+        .sort-btn:hover, .sort-btn:focus {
+            background: #E6F0FA;
+            outline: 2px solid var(--kai-blue);
+        }
+
+        .results-section {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+
+        .results-title {
+            font-size: 28px;
+            color: var(--kai-blue);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .ticket-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .ticket-card {
+            background: var(--kai-white);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            transition: var(--transition);
+        }
+
+        .ticket-card:hover, .ticket-card:focus {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            outline: 2px solid var(--kai-blue);
+        }
+
+        .ticket-card h3 {
+            font-size: 20px;
+            color: var(--kai-blue);
+            margin-bottom: 10px;
+        }
+
+        .ticket-card p {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .ticket-card .highlight {
+            color: var(--kai-red);
+            font-weight: 600;
+        }
+
+        .btn-book {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--kai-blue) 0%, var(--kai-red) 100%);
+            color: var(--kai-white);
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .btn-book:hover, .btn-book:focus {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+            outline: 2px solid var(--kai-white);
+        }
+
+        .no-results {
+            background: var(--kai-white);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            font-size: 16px;
+            color: #666;
+        }
+
+        footer {
+            background: var(--kai-blue);
+            color: var(--kai-white);
+            padding: 40px 20px;
+            margin-top: 50px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+        }
+
+        .footer-logo img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo p {
+            font-size: 14px;
+            line-height: 1.8;
+            opacity: 0.8;
+        }
+
+        .footer-nav h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .footer-nav ul {
+            list-style: none;
+        }
+
+        .footer-nav ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-nav ul li a {
+            color: var(--kai-white);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .footer-nav ul li a:hover, .footer-nav ul li a:focus {
+            color: var(--kai-yellow);
+            outline: 2px solid var(--kai-white);
+        }
+
+        .footer-social h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .footer-social .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-social .social-icons a {
+            color: var(--kai-white);
+            font-size: 24px;
+            transition: var(--transition);
+        }
+
+        .footer-social .social-icons a:hover, .footer-social .social-icons a:focus {
+            color: var(--kai-yellow);
+            transform: translateY(-2px);
+            outline: 2px solid var(--kai-white);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 1024px) {
+            .search-section,
+            .sort-section,
+            .results-section {
+                padding: 0 20px;
+            }
+
+            .ticket-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-social .social-icons {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .booking-card {
+                padding: 20px;
+            }
+
+            .sort-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .sort-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="promo-banner">
+        🚆 Promo Tiket KAI: Hemat hingga 30% untuk perjalanan akhir tahun! Pesan sekarang di KAI Access!
+    </div>
+
+    <header>
+        <div class="logo" role="img" aria-label="Logo Kereta Api Indonesia">
+            <img src="download-removebg-preview.png" alt="Logo KAI">
+        </div>
+        <nav aria-label="Navigasi utama">
+            <a href="index.html" aria-label="Home">Home</a>
+            <a href="#" aria-label="Program referral KAI">Referral</a>
+            <a href="#" aria-label="Layanan bisnis KAI">Bisnis</a>
+            <a href="#" aria-label="Keranjang belanja">Keranjang</a>
+            <a href="#" aria-label="Rencana perjalanan favorit">Rencana Perjalanan</a>
+            <a href="#" aria-label="Pesanan saya">Pesanan Saya</a>
+            <button class="btn-signin" aria-label="Masuk ke akun KAI">Masuk</button>
+        </nav>
+    </header>
+
+    <section class="search-section">
+        <div class="booking-card" role="region" aria-label="Formulir pencarian tiket">
+            <div class="trip-type" role="radiogroup" aria-label="Pilih jenis perjalanan">
+                <button class="trip-btn active" role="radio" aria-checked="true" onclick="setTripType('oneway')">Sekali Jalan</button>
+                <button class="trip-btn" role="radio" aria-checked="false" onclick="setTripType('roundtrip')">Pulang Pergi</button>
+            </div>
+            <div class="input-group">
+                <label for="from">Dari</label>
+                <input type="text" id="from" placeholder="Kota atau stasiun" aria-label="Stasiun keberangkatan" oninput="autocomplete(this, stations)">
+                <div id="from-suggestions" class="autocomplete-suggestions"></div>
+            </div>
+            <div class="input-group">
+                <label for="to">Tujuan</label>
+                <input type="text" id="to" placeholder="Kota atau stasiun" aria-label="Stasiun tujuan" oninput="autocomplete(this, stations)">
+                <div id="to-suggestions" class="autocomplete-suggestions"></div>
+            </div>
+            <div class="input-group">
+                <label for="out">Berangkat</label>
+                <input type="date" id="out" aria-label="Tanggal keberangkatan">
+            </div>
+            <button class="btn-search" aria-label="Cari tiket termurah" onclick="searchTrains()">Cari Tiket Termurah</button>
+        </div>
+    </section>
+
+    <section class="sort-section" role="region" aria-label="Opsi pengurutan hasil pencarian">
+        <button class="sort-btn" onclick="sortResults('price')" aria-label="Urutkan hasil berdasarkan harga termurah">Harga Termurah</button>
+        <button class="sort-btn" onclick="sortResults('departure')" aria-label="Urutkan hasil berdasarkan waktu keberangkatan">Waktu Keberangkatan</button>
+        <button class="sort-btn" onclick="filterByType('KRL')" aria-label="Filter tiket KRL">KRL</button>
+        <button class="sort-btn" onclick="filterByType('LRT')" aria-label="Filter tiket LRT">LRT</button>
+        <button class="sort-btn" onclick="filterByType('MRT')" aria-label="Filter tiket MRT">MRT</button>
+        <button class="sort-btn" onclick="filterByType('all')" aria-label="Tampilkan semua tiket">Semua</button>
+    </section>
+
+    <section class="results-section" role="region" aria-label="Hasil pencarian tiket">
+        <h2 class="results-title">Hasil Pencarian Tiket</h2>
+        <div id="ticket-results" class="ticket-cards" aria-live="polite"></div>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="download-removebg-preview.png" alt="Logo KAI">
+                <p>PT Kereta Api Indonesia (Persero) - Menghubungkan Indonesia dengan layanan transportasi kereta api yang aman, nyaman, dan terjangkau.</p>
+            </div>
+            <div class="footer-nav">
+                <h4>Navigasi</h4>
+                <ul>
+                    <li><a href="#" aria-label="Tentang KAI">Tentang Kami</a></li>
+                    <li><a href="#" aria-label="Layanan KAI">Layanan</a></li>
+                    <li><a href="#" aria-label="Kontak KAI">Kontak</a></li>
+                    <li><a href="#" aria-label="Kebijakan Privasi KAI">Kebijakan Privasi</a></li>
+                    <li><a href="#" aria-label="Syarat dan Ketentuan KAI">Syarat & Ketentuan</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Ikuti Kami</h4>
+                <div class="social-icons">
+                    <a href="https://facebook.com" aria-label="Facebook KAI"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com" aria-label="Twitter KAI"><i class="fab fa-twitter"></i></a>
+                    <a href="https://instagram.com" aria-label="Instagram KAI"><i class="fab fa-instagram"></i></a>
+                    <a href="https://youtube.com" aria-label="YouTube KAI"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 PT Kereta Api Indonesia (Persero). All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const stations = [
+            'Jakarta Gambir', 'Jakarta Senen', 'Jakarta Kota', 'Tanah Abang', 'Manggarai', 'Pasar Senen',
+            'Bandung', 'Yogyakarta', 'Surabaya Gubeng', 'Surabaya Pasar Turi', 'Semarang Tawang',
+            'Solo Balapan', 'Malang', 'Bogor', 'Depok', 'Bekasi', 'Cikarang', 'Tangerang',
+            'Cimahi', 'Padalarang', 'Cianjur', 'Purwakarta', 'Subang', 'Cirebon', 'Indramayu',
+            'Tegal', 'Pekalongan', 'Batang', 'Kendal', 'Wonosobo', 'Magelang', 'Kutoarjo',
+            'Purwosari', 'Madiun', 'Nganjuk', 'Jombang', 'Mojokerto', 'Sidoarjo', 'Lamongan',
+            'Tuban', 'Bojonegoro', 'Cepu', 'Lasem', 'Rembang', 'Blora', 'Kedungjati',
+            'Purwodadi', 'Grobogan', 'Sragen', 'Karanganyar', 'Wonogiri', 'Ponorogo',
+            'Pacitan', 'Tulungagung', 'Blitar', 'Kediri', 'Nganjuk', 'Jombang', 'Bangil',
+            'Probolinggo', 'Kraksaan', 'Pasuruan', 'Lawang', 'Batu', 'Banyuwangi', 'Jember',
+            'Genteng', 'Kalibata', 'Kalisat', 'Lumajang', 'Bangkalan', 'Pamekasan', 'Sampang',
+            'Sumenep', 'Kediri', 'Pare', 'Nganjuk', 'Jombang', 'Mojosari', 'Pandaan',
+            'Lawang', 'Malang', 'Batu', 'Blitar', 'Tulungagung', 'Nganjuk', 'Madiun',
+            'Ngawi', 'Magetan', 'Ponorogo', 'Pacitan', 'Trenggalek', 'Tulungagung', 'Blitar'
+        ];
+
+        const sampleTrains = [
+            { type: 'KAI', name: 'Argo Parahyangan', from: 'Jakarta Gambir', to: 'Bandung', departure: '07:00', arrival: '10:00', price: 150000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Argo Sindoro', from: 'Jakarta Gambir', to: 'Semarang Tawang', departure: '07:15', arrival: '12:30', price: 200000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Bima', from: 'Jakarta Senen', to: 'Surabaya Gubeng', departure: '15:30', arrival: '06:00', price: 350000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Gajayana', from: 'Jakarta Gambir', to: 'Malang', departure: '17:35', arrival: '05:45', price: 280000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Siliwangi', from: 'Jakarta Gambir', to: 'Bandung', departure: '16:00', arrival: '19:00', price: 120000, class: 'Bisnis' },
+            { type: 'KAI', name: 'Argo Wilis', from: 'Bandung', to: 'Surabaya Gubeng', departure: '08:00', arrival: '18:30', price: 400000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Lodaya', from: 'Bandung', to: 'Solo Balapan', departure: '07:30', arrival: '17:00', price: 350000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Turangga', from: 'Bandung', to: 'Surabaya Gubeng', departure: '17:00', arrival: '04:30', price: 380000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Mutiara Selatan', from: 'Bandung', to: 'Surabaya Gubeng', departure: '18:00', arrival: '05:30', price: 360000, class: 'Bisnis' },
+            { type: 'KAI', name: 'Argo Lawu', from: 'Jakarta Gambir', to: 'Solo Balapan', departure: '20:00', arrival: '05:00', price: 300000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Taksaka', from: 'Jakarta Gambir', to: 'Yogyakarta', departure: '09:00', arrival: '16:30', price: 250000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Sancaka', from: 'Yogyakarta', to: 'Surabaya Gubeng', departure: '07:00', arrival: '12:00', price: 180000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Bangunkarta', from: 'Jakarta Senen', to: 'Semarang Tawang', departure: '16:30', arrival: '23:30', price: 220000, class: 'Bisnis' },
+            { type: 'KAI', name: 'Gumarang', from: 'Jakarta Senen', to: 'Surabaya Pasar Turi', departure: '15:00', arrival: '02:00', price: 320000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Sembrani', from: 'Jakarta Gambir', to: 'Surabaya Pasar Turi', departure: '19:30', arrival: '06:30', price: 340000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Argo Bromo Anggrek', from: 'Jakarta Gambir', to: 'Surabaya Pasar Turi', departure: '08:00', arrival: '16:30', price: 450000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Kertajaya', from: 'Jakarta Senen', to: 'Surabaya Pasar Turi', departure: '14:00', arrival: '03:00', price: 280000, class: 'Ekonomi' },
+            { type: 'KAI', name: 'Malioboro Ekspres', from: 'Yogyakarta', to: 'Malang', departure: '08:30', arrival: '13:00', price: 150000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Jayakarta', from: 'Jakarta Senen', to: 'Surabaya Gubeng', departure: '17:00', arrival: '07:00', price: 300000, class: 'Ekonomi' },
+            { type: 'KAI', name: 'Progo', from: 'Jakarta Senen', to: 'Yogyakarta', departure: '22:00', arrival: '06:30', price: 200000, class: 'Ekonomi' },
+            { type: 'KAI', name: 'Bogowonto', from: 'Jakarta Senen', to: 'Yogyakarta', departure: '21:00', arrival: '05:30', price: 190000, class: 'Ekonomi' },
+            { type: 'KAI', name: 'Krakatau', from: 'Merak', to: 'Madiun', departure: '09:00', arrival: '23:00', price: 250000, class: 'Ekonomi' },
+            { type: 'KAI', name: 'Brantas', from: 'Jakarta Senen', to: 'Blitar', departure: '13:30', arrival: '04:00', price: 280000, class: 'Ekonomi' },
+            { type: 'KAI', name: 'Majapahit', from: 'Jakarta Senen', to: 'Malang', departure: '18:30', arrival: '09:00', price: 320000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Matarmaja', from: 'Jakarta Senen', to: 'Malang', departure: '10:30', arrival: '02:00', price: 260000, class: 'Ekonomi' },
+            { type: 'KAI', name: 'Joglosemarkerto', from: 'Semarang Tawang', to: 'Solo Balapan', departure: '06:00', arrival: '08:30', price: 80000, class: 'Ekonomi' },
+            { type: 'KAI', name: 'Ambarawa Ekspres', from: 'Semarang Tawang', to: 'Surabaya Pasar Turi', departure: '05:30', arrival: '11:00', price: 150000, class: 'Ekonomi' },
+            { type: 'KAI', name: 'Harina', from: 'Semarang Tawang', to: 'Surabaya Pasar Turi', departure: '22:30', arrival: '04:00', price: 180000, class: 'Bisnis' },
+            { type: 'KAI', name: 'Kertanegara', from: 'Yogyakarta', to: 'Malang', departure: '20:30', arrival: '01:30', price: 140000, class: 'Eksekutif' },
+            { type: 'KAI', name: 'Singasari', from: 'Jakarta Senen', to: 'Blitar', departure: '16:30', arrival: '07:30', price: 290000, class: 'Ekonomi' },
+            { type: 'KRL', name: 'KRL Bogor Line', from: 'Jakarta Kota', to: 'Bogor', departure: '08:00', arrival: '09:30', price: 5000, class: 'Ekonomi' },
+            { type: 'KRL', name: 'KRL Bekasi Line', from: 'Jakarta Kota', to: 'Bekasi', departure: '09:00', arrival: '09:45', price: 4000, class: 'Ekonomi' },
+            { type: 'LRT', name: 'LRT Jabodebek', from: 'Dukuh Atas', to: 'Bekasi', departure: '07:30', arrival: '08:15', price: 10000, class: 'Standar' },
+            { type: 'LRT', name: 'LRT Palembang', from: 'Bandara', to: 'Ogan Permata Indah', departure: '10:00', arrival: '10:45', price: 8000, class: 'Standar' },
+            { type: 'MRT', name: 'MRT Lebak Bulus', from: 'Lebak Bulus', to: 'Bundaran HI', departure: '06:30', arrival: '07:15', price: 12000, class: 'Standar' },
+            { type: 'MRT', name: 'MRT Fatmawati', from: 'Fatmawati', to: 'Dukuh Atas', departure: '08:30', arrival: '09:00', price: 7000, class: 'Standar' }
+        ];
+
+        let tripType = 'oneway';
+        let currentSort = 'price';
+        let currentFilter = 'all';
+
+        function setTripType(type) {
+            tripType = type;
+            document.querySelectorAll('.trip-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-checked', 'false');
+            });
+            event.target.classList.add('active');
+            event.target.setAttribute('aria-checked', 'true');
+        }
+
+        function autocomplete(input, data) {
+            const suggestions = document.getElementById(input.id + '-suggestions');
+            const value = input.value.toLowerCase();
+            suggestions.innerHTML = '';
+
+            if (value.length < 1) {  // Diubah jadi minimal 1 karakter untuk rekomendasi lebih cepat
+                suggestions.style.display = 'none';
+                return;
+            }
+
+            const matches = data.filter(station => station.toLowerCase().includes(value));
+            if (matches.length > 0) {
+                matches.slice(0, 10).forEach(match => {  // Tampilkan hingga 10 saran untuk lebih banyak opsi
+                    const div = document.createElement('div');
+                    div.className = 'autocomplete-suggestion';
+                    div.textContent = match;
+                    div.setAttribute('tabindex', '0');
+                    div.setAttribute('role', 'option');
+                    div.setAttribute('aria-label', `Pilih stasiun ${match}`);
+                    div.onclick = () => {
+                        input.value = match;
+                        suggestions.style.display = 'none';
+                    };
+                    div.onkeydown = (e) => {
+                        if (e.key === 'Enter') {
+                            input.value = match;
+                            suggestions.style.display = 'none';
+                        }
+                    };
+                    suggestions.appendChild(div);
+                });
+                suggestions.style.display = 'block';
+            } else {
+                suggestions.style.display = 'none';
+            }
+        }
+
+        function searchTrains() {
+            const from = document.getElementById('from').value;
+            const to = document.getElementById('to').value;
+            const date = document.getElementById('out').value;
+
+            if (!from || !to || !date) {
+                alert('Isi dari, tujuan, dan tanggal!');
+                return;
+            }
+
+            const query = `from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${encodeURIComponent(date)}&triptype=${encodeURIComponent(tripType)}`;
+            window.location.href = `tickets.html?${query}`;
+        }
+
+        function sortResults(sortBy) {
+            currentSort = sortBy;
+            updateActiveSortButtons();
+            displayResults();
+        }
+
+        function filterByType(filterType) {
+            currentFilter = filterType;
+            updateActiveSortButtons();
+            displayResults();
+        }
+
+        function updateActiveSortButtons() {
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick').includes(currentSort) || btn.getAttribute('onclick').includes(currentFilter)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function parseTime(timeStr) {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
+
+        function formatPrice(price) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(price);
+        }
+
+        function displayResults() {
+            const params = new URLSearchParams(window.location.search);
+            const from = params.get('from') || '';
+            const to = params.get('to') || '';
+            const date = params.get('date') || '';
+            const triptype = params.get('triptype') || 'oneway';
+
+            const resultsDiv = document.getElementById('ticket-results');
+            let results = sampleTrains.filter(train => 
+                train.from.toLowerCase().includes(from.toLowerCase()) && 
+                train.to.toLowerCase().includes(to.toLowerCase())
+            );
+
+            if (currentFilter !== 'all') {
+                results = results.filter(train => train.type === currentFilter);
+            }
+
+            if (currentSort === 'price') {
+                results.sort((a, b) => a.price - b.price);
+            } else if (currentSort === 'departure') {
+                results.sort((a, b) => parseTime(a.departure) - parseTime(b.departure));
+            }
+
+            if (results.length > 0) {
+                resultsDiv.innerHTML = results.map(train => `
+                    <div class="ticket-card" role="article" aria-label="Tiket kereta ${train.name}">
+                        <h3>${train.name} (${train.type})</h3>
+                        <p><strong>Kelas:</strong> ${train.class}</p>
+                        <p><strong>Berangkat:</strong> ${train.departure} dari ${train.from}</p>
+                        <p><strong>Tiba:</strong> ${train.arrival} di ${train.to}</p>
+                        <p><strong>Harga:</strong> <span class="highlight">${formatPrice(train.price)}</span></p>
+                        <a href="#" class="btn-book" aria-label="Pesan tiket ${train.name}">Pesan Sekarang</a>
+                    </div>
+                `).join('');
+            } else {
+                resultsDiv.innerHTML = `
+                    <div class="no-results" role="alert" aria-label="Tidak ada tiket ditemukan">
+                        Tidak ada tiket tersedia untuk rute ${from} ke ${to} pada ${date}. Coba rute atau tanggal lain!
+                    </div>
+                `;
+            }
+        }
+
+        function initSearchForm() {
+            const params = new URLSearchParams(window.location.search);
+            const from = params.get('from') || '';
+            const to = params.get('to') || '';
+            const date = params.get('date') || '';
+            const triptype = params.get('triptype') || 'oneway';
+
+            document.getElementById('from').value = from;
+            document.getElementById('to').value = to;
+            document.getElementById('out').value = date;
+            document.querySelectorAll('.trip-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-checked', 'false');
+                if (btn.getAttribute('onclick').includes(triptype)) {
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-checked', 'true');
+                }
+            });
+            tripType = triptype;
+
+            updateActiveSortButtons();
+            displayResults();
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.input-group')) {
+                document.querySelectorAll('.autocomplete-suggestions').forEach(s => s.style.display = 'none');
+            }
+        });
+
+        window.addEventListener('load', initSearchForm);
+    </script>
+</body>
+</html>
