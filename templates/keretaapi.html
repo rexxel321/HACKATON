@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pesan tiket kereta api KAI, KRL Commuter Line, LRT Jabodetabek, dan MRT Jakarta. Perjalanan hemat dan nyaman!">
+    <title>KAI - Pesan Perjalanan Anda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --kai-blue: #003087;
+            --kai-red: #D81F2A;
+            --kai-gray: #E8ECF1;
+            --kai-yellow: #FFC107;
+            --kai-white: #FFFFFF;
+            --kai-pink: #ff0080;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --high-contrast-bg: #000000;
+            --high-contrast-text: #FFFFFF;
+            --high-contrast-link: #FFFF00;
+            --high-contrast-button-bg: #333333;
+            --high-contrast-border: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--kai-gray) 0%, #F5F7FA 100%);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        body.high-contrast {
+            background: var(--high-contrast-bg) !important;
+            color: var(--high-contrast-text) !important;
+        }
+
+        body.high-contrast * {
+            background: var(--high-contrast-bg) !important;
+            color: var(--high-contrast-text) !important;
+            border-color: var(--high-contrast-border) !important;
+        }
+
+        body.high-contrast a {
+            color: var(--high-contrast-link) !important;
+        }
+
+        body.high-contrast button,
+        body.high-contrast input,
+        body.high-contrast select {
+            background: var(--high-contrast-button-bg) !important;
+            color: var(--high-contrast-text) !important;
+            border: 2px solid var(--high-contrast-border) !important;
+        }
+
+        body.high-contrast .btn-signin,
+        body.high-contrast .btn-search,
+        body.high-contrast .btn-traffic,
+        body.high-contrast .trip-btn,
+        body.high-contrast .promo-banner,
+        body.high-contrast header,
+        body.high-contrast footer,
+        body.high-contrast .booking-card,
+        body.high-contrast .traffic-card,
+        body.high-contrast .info-box,
+        body.high-contrast .train-animation * {
+            background: var(--high-contrast-bg) !important;
+            color: var(--high-contrast-text) !important;
+            border-color: var(--high-contrast-border) !important;
+        }
+
+        body.high-contrast .highlight,
+        body.high-contrast .highlight-pink,
+        body.high-contrast .highlight-blue {
+            color: var(--high-contrast-link) !important;
+        }
+
+        body.large-text {
+            font-size: 20px !important;
+        }
+
+        body.large-text * {
+            font-size: inherit !important;
+        }
+
+        body.large-text h1 {
+            font-size: 3em !important;
+        }
+
+        body.large-text h3 {
+            font-size: 1.5em !important;
+        }
+
+        body.large-text h2 {
+            font-size: 2.5em !important;
+        }
+
+        body.large-text p,
+        body.large-text label,
+        body.large-text button {
+            font-size: 1.25em !important;
+        }
+
+        .promo-banner {
+            background: linear-gradient(90deg, var(--kai-blue) 0%, var(--kai-red) 100%);
+            color: var(--kai-white);
+            text-align: center;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        header {
+            background: var(--kai-white);
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--kai-blue);
+        }
+
+        .logo img {
+            height: 40px;
+            margin-left: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .logo img {
+                height: 30px;
+                margin-left: 10px;
+                width: 70px;
+            }
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        nav a:hover, nav a:focus {
+            color: var(--kai-yellow);
+            outline: 2px solid var(--kai-blue);
+        }
+
+        .btn-signin {
+            background: var(--kai-yellow);
+            color: var(--kai-white);
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-signin:hover, .btn-signin:focus {
+            background: var(--kai-red);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            outline: 2px solid var(--kai-blue);
+        }
+
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 40px;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .booking-card {
+            background: var(--kai-white);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            min-width: 450px;
+            animation: slideInLeft 0.8s ease-out;
+            position: relative;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .city-display {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #f8f9fa;
+            color: #333;
+            height: 48px;
+            line-height: 18px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #e0e0e0;
+        }
+
+        .city-text {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            opacity: 0;
+            animation: fadeCity 12s infinite;
+        }
+
+        .city-text:nth-child(1) { animation-delay: 0s; }
+        .city-text:nth-child(2) { animation-delay: 3s; }
+        .city-text:nth-child(3) { animation-delay: 6s; }
+        .city-text:nth-child(4) { animation-delay: 9s; }
+
+        @keyframes fadeCity {
+            0% { opacity: 0; }
+            8.33% { opacity: 1; }
+            25% { opacity: 1; }
+            33.33% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        .trip-type {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .trip-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            background: var(--kai-white);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        .trip-btn.active {
+            background: #E6F0FA;
+            border-color: var(--kai-blue);
+            color: var(--kai-blue);
+            font-weight: 600;
+        }
+
+        .trip-btn:focus {
+            outline: 2px solid var(--kai-blue);
+        }
+
+        .passengers {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f8f9fa;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .passengers:hover, .passengers:focus {
+            border-color: var(--kai-blue);
+            background: var(--kai-white);
+            outline: 2px solid var(--kai-blue);
+        }
+
+        .passenger-text {
+            font-weight: 600;
+            animation: textCycle 6s ease-in-out infinite;
+        }
+
+        @keyframes textCycle {
+            0%, 20% { content: "Harga Termurah"; }
+            25%, 45% { content: "Paling Terjangkau"; }
+            50%, 70% { content: "Hemat Perjalanan"; }
+            75%, 95% { content: "Tarif Terbaik"; }
+            100% { content: "Harga Termurah"; }
+        }
+
+        .passenger-text::before {
+            content: "Harga Termurah";
+            animation: textCycle 6s ease-in-out infinite;
+        }
+
+        .voucher-link {
+            color: var(--kai-blue);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .voucher-link:hover, .voucher-link:focus {
+            color: var(--kai-red);
+            outline: 2px solid var(--kai-blue);
+        }
+
+        .btn-search {
+            width: 100%;
+            padding: 18px;
+            margin-top: 50px;
+            background: linear-gradient(135deg, var(--kai-blue) 0%, var(--kai-red) 100%);
+            color: var(--kai-white);
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .btn-search:hover, .btn-search:focus {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+            outline: 2px solid var(--kai-white);
+        }
+
+        #search-results {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--kai-white);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+
+        .result-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .hero-content {
+            flex: 1;
+            animation: fadeInRight 1s ease-out;
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .hero-content h1 {
+            font-size: 58px;
+            color: var(--kai-blue);
+            line-height: 1.2;
+            margin-bottom: 25px;
+            font-weight: 800;
+        }
+
+        .hero-content h1 .highlight {
+            color: var(--kai-red);
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .train-animation {
+            position: relative;
+            height: 250px;
+            margin-top: 40px;
+            overflow: hidden;
+            background: linear-gradient(to bottom, transparent 0%, #D2B48C 80%, #8B5A2B 100%);
+        }
+
+        .train {
+            position: absolute;
+            bottom: 65px;
+            animation: trainMove 8s ease-in-out infinite;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+            z-index: 2;
+        }
+
+        @keyframes trainMove {
+            0% { left: -300px; }
+            50% { left: calc(100% - 50px); }
+            100% { left: -300px; }
+        }
+
+        .train svg {
+            width: 250px;
+            height: auto;
+        }
+
+        .track {
+            position: absolute;
+            bottom: 60px;
+            width: 100%;
+            height: 8px;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #4A2F1A 0px,
+                    #4A2F1A 20px,
+                    transparent 20px,
+                    transparent 40px
+                ),
+                linear-gradient(
+                    to bottom,
+                    #666 0%,
+                    #333 100%
+                );
+            opacity: 0.8;
+            z-index: 1;
+        }
+
+        .clouds {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 200px;
+        }
+
+        .cloud {
+            position: absolute;
+            background: var(--kai-white);
+            border-radius: 100px;
+            opacity: 0.6;
+            animation: cloudMove 25s linear infinite;
+        }
+
+        .cloud:nth-child(1) {
+            width: 100px;
+            height: 40px;
+            top: 20px;
+            animation-delay: 0s;
+        }
+
+        .cloud:nth-child(2) {
+            width: 140px;
+            height: 50px;
+            top: 60px;
+            animation-delay: -10s;
+        }
+
+        .cloud:nth-child(3) {
+            width: 80px;
+            height: 35px;
+            top: 100px;
+            animation-delay: -5s;
+        }
+
+        @keyframes cloudMove {
+            0% { left: -200px; }
+            100% { left: calc(100% + 200px); }
+        }
+
+        .krl-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            animation: slideInUp 0.8s ease-out;
+            border: 3px solid var(--kai-blue);
+            position: relative;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-image: url("images/krl-promo.jpg");
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .kai-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+        }
+
+        .content-section {
+            margin-bottom: 50px;
+            padding: 40px 0;
+        }
+
+        .traffic-card {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 15px;
+            position: relative;
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .traffic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        .traffic-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: var(--kai-white);
+            padding: 20px;
+        }
+
+        .traffic-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .btn-traffic {
+            background: linear-gradient(135deg, var(--kai-blue) 0%, var(--kai-red) 100%);
+            color: var(--kai-white);
+            padding: 12px 30px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-traffic:hover, .btn-traffic:focus {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            outline: 2px solid var(--kai-white);
+        }
+
+        .border-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .border-card {
+            display: block;
+            height: 200px;
+            border-radius: 10px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            text-decoration: none;
+        }
+
+        .border-card:hover, .border-card:focus {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            outline: 2px solid var(--kai-blue);
+        }
+
+        .section-title {
+            color: var(--kai-blue);
+            font-size: 32px;
+            margin: 20px 0 20px 0;
+            font-weight: bold;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .map-container {
+            width: 100%;
+        }
+
+        .map-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .text-content h3 {
+            color: var(--kai-blue);
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .text-content p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .highlight-pink {
+            color: var(--kai-pink);
+            font-weight: bold;
+        }
+
+        .highlight-blue {
+            color: var(--kai-blue);
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #f0f8ff;
+            padding: 20px;
+            border-left: 4px solid var(--kai-blue);
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info-box p {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background: var(--kai-blue);
+            color: var(--kai-white);
+            padding: 40px 20px;
+            margin-top: 50px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+        }
+
+        .footer-logo img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo p {
+            font-size: 14px;
+            line-height: 1.8;
+            opacity: 0.8;
+        }
+
+        .footer-nav h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .footer-nav ul {
+            list-style: none;
+        }
+
+        .footer-nav ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-nav ul li a {
+            color: var(--kai-white);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .footer-nav ul li a:hover, .footer-nav ul li a:focus {
+            color: var(--kai-yellow);
+            outline: 2px solid var(--kai-white);
+        }
+
+        .footer-social h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .footer-social .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-social .social-icons a {
+            color: var(--kai-white);
+            font-size: 24px;
+            transition: var(--transition);
+        }
+
+        .footer-social .social-icons a:hover, .footer-social .social-icons a:focus {
+            color: var(--kai-yellow);
+            transform: translateY(-2px);
+            outline: 2px solid var(--kai-white);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 1024px) {
+            .container, .kai-container {
+                flex-direction: column;
+            }
+
+            .hero-content h1 {
+                font-size: 42px;
+            }
+
+            .booking-card {
+                min-width: 100%;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .traffic-card {
+                height: 200px;
+            }
+
+            .border-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .border-card {
+                height: 180px;
+            }
+
+            .krl-section {
+                height: 300px;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-social .social-icons {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .kai-container {
+                padding: 30px 20px;
+            }
+
+            .traffic-content h3 {
+                font-size: 20px;
+            }
+
+            .traffic-card {
+                margin: 20px 0;
+                height: 180px;
+            }
+
+            .border-card {
+                height: 150px;
+            }
+
+            .krl-section {
+                height: 300px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="promo-banner">
+        🚆 Promo Tiket KAI: Hemat hingga 30% untuk perjalanan akhir tahun! Pesan sekarang di KAI Access!
+    </div>
+
+    <header>
+        <div class="logo" role="img" aria-label="Logo Kereta Api Indonesia">
+            <img src="images/kai-logo.png" alt="Logo KAI">
+        </div>
+        <nav aria-label="Navigasi utama">
+            <a href="#" aria-label="Home">Home</a>
+            <a href="#" aria-label="Program referral KAI">Referral</a>
+            <a href="#" aria-label="Layanan bisnis KAI">Bisnis</a>
+            <a href="#" aria-label="Keranjang belanja">Keranjang</a>
+            <a href="#" aria-label="Rencana perjalanan favorit">Rencana Perjalanan</a>
+            <a href="#" aria-label="Pesanan saya">Pesanan Saya</a>
+            <button class="btn-signin" aria-label="Masuk ke akun KAI">Masuk</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="booking-card" role="region" aria-label="Formulir pemesanan tiket">
+            <div class="trip-type" role="radiogroup" aria-label="Pilih jenis perjalanan">
+                <button class="trip-btn active" role="radio" aria-checked="true" onclick="setTripType('oneway')">Sekali Jalan</button>
+                <button class="trip-btn" role="radio" aria-checked="false" onclick="setTripType('roundtrip')">Pulang Pergi</button>
+            </div>
+
+            <div class="input-group">
+                <label for="from">Dari</label>
+                <div class="city-display" aria-label="Daftar kota keberangkatan">
+                    <span class="city-text">Jakarta Gambir</span>
+                    <span class="city-text">Bandung</span>
+                    <span class="city-text">Surabaya</span>
+                    <span class="city-text">Yogyakarta</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="to">Tujuan</label>
+                <div class="city-display" aria-label="Daftar kota tujuan">
+                    <span class="city-text">Semarang</span>
+                    <span class="city-text">Bogor</span>
+                    <span class="city-text">Bekasi</span>
+                    <span class="city-text">Malang</span>
+                </div>
+            </div>
+
+            <div class="passengers" tabindex="0" aria-label="Pilih jumlah penumpang dan railcard" onclick="togglePassengers()">
+                <div>
+                    <div class="passenger-text"></div>
+                    <div style="font-size: 13px; color: #666;">Tambah railcard</div>
+                </div>
+                <span style="font-size: 20px;">›</span>
+            </div>
+
+            <a href="tickets.html" class="btn-search" aria-label="Cari tiket termurah">Cari Tiket Termurah</a>
+        </div>
+
+        <div class="hero-content">
+            <h1>Bersama <span class="highlight">KAI</span> dalam setiap perjalanan anda!</h1>
+            <p>Jelajahi Indonesia dengan Kereta Api KAI, nyaman dan hemat!</p>
+
+            <div class="train-animation">
+                <div class="clouds">
+                    <div class="cloud"></div>
+                    <div class="cloud"></div>
+                    <div class="cloud"></div>
+                </div>
+                <div class="track"></div>
+                <div class="train">
+                    <svg viewBox="0 0 300 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="30" width="250" height="60" rx="10" fill="var(--kai-blue)"/>
+                        <rect x="25" y="35" width="240" height="50" rx="8" fill="#2d2d6d"/>
+                        <rect x="40" y="45" width="35" height="30" rx="4" fill="#87CEEB" opacity="0.8"/>
+                        <rect x="85" y="45" width="35" height="30" rx="4" fill="#87CEEB" opacity="0.8"/>
+                        <rect x="130" y="45" width="35" height="30" rx="4" fill="#87CEEB" opacity="0.8"/>
+                        <rect x="175" y="45" width="35" height="30" rx="4" fill="#87CEEB" opacity="0.8"/>
+                        <rect x="220" y="45" width="35" height="30" rx="4" fill="#87CEEB" opacity="0.8"/>
+                        <path d="M270 45 L290 55 L290 65 L270 75 Z" fill="var(--kai-red)"/>
+                        <circle cx="282" cy="60" r="5" fill="var(--kai-yellow)"/>
+                        <rect x="20" y="60" width="250" height="8" fill="var(--kai-red)"/>
+                        <circle cx="50" cy="95" r="12" fill="#333"/>
+                        <circle cx="50" cy="95" r="7" fill="#666"/>
+                        <circle cx="100" cy="95" r="12" fill="#333"/>
+                        <circle cx="100" cy="95" r="7" fill="#666"/>
+                        <circle cx="190" cy="95" r="12" fill="#333"/>
+                        <circle cx="190" cy="95" r="7" fill="#666"/>
+                        <circle cx="240" cy="95" r="12" fill="#333"/>
+                        <circle cx="240" cy="95" r="7" fill="#666"/>
+                        <line x1="0" y1="100" x2="15" y2="100" stroke="var(--kai-red)" stroke-width="2" opacity="0.5">
+                            <animate attributeName="x1" values="-20;0" dur="0.3s" repeatCount="indefinite"/>
+                            <animate attributeName="x2" values="0;15" dur="0.3s" repeatCount="indefinite"/>
+                        </line>
+                        <line x1="0" y1="108" x2="12" y2="108" stroke="var(--kai-red)" stroke-width="2" opacity="0.5">
+                            <animate attributeName="x1" values="-15;0" dur="0.25s" repeatCount="indefinite"/>
+                            <animate attributeName="x2" values="0;12" dur="0.25s" repeatCount="indefinite"/>
+                        </line>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#"><section class="krl-section" role="region" aria-label="Pemesanan tiket KRL Commuter Line"></section></a>
+
+    <div class="kai-container">
+        <div class="content-section">
+            <div class="traffic-card" style="background-image: url('images/traffic-monitoring.jpg');">
+                <div class="traffic-content">
+                    <h3>Cek aktivitas kereta secara langsung Sekarang!</h3>
+                    <a href="kereta.html" class="btn-traffic" aria-label="Cek aktivitas kereta secara langsung sekarang!">Klik disini</a>
+                </div>
+            </div>
+            <div class="border-cards">
+                <a href="page1.html" class="border-card" style="background-image: url('images/feature-card-1.jpg');" aria-label="Check our newest feature"></a>
+                <a href="page2.html" class="border-card" style="background-image: url('images/schedule-card.jpg');" aria-label="Kunjungi halaman jadwal"></a>
+                <a href="page3.html" class="border-card" style="background-image: url('images/destination-card.jpg');" aria-label="Kunjungi halaman destinasi"></a>
+            </div>
+            <h1 class="section-title">Jelajahi KRL Commuter Line dengan KAI</h1>
+            <div class="two-column">
+                <div class="map-container">
+                    <img src="images/krl-map.jpg" alt="Peta Rute KRL">
+                </div>
+                <div class="text-content">
+                    <h3>KRL Commuter Line: Solusi Perjalanan Jabodetabek</h3>
+                    <p>KRL Commuter Line, dikelola oleh KAI, adalah sistem kereta komuter terpercaya di Jabodetabek. Menghubungkan Jakarta dengan Bogor, Depok, Tangerang, dan Bekasi, KRL melayani jutaan penumpang setiap hari dengan jadwal yang tepat waktu.</p>
+                    <p>Dengan fasilitas seperti AC dan tempat duduk yang nyaman, KRL menawarkan perjalanan yang efisien dan ramah lingkungan. Cocok untuk perjalanan harian, baik untuk kerja atau sekolah!</p>
+                    <div class="info-box">
+                        <p><strong>Info Penting:</strong> Pastikan Anda naik di stasiun yang benar, karena beberapa kota memiliki lebih dari satu stasiun.</p>
+                        <p>Nikmati perjalanan hemat dan cepat di seluruh Jabodetabek!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h1 class="section-title">Temukan LRT Jabodetabek dengan KAI</h1>
+            <div class="two-column">
+                <div class="text-content">
+                    <p>LRT Jabodetabek adalah solusi modern untuk mengatasi kemacetan di Jakarta dan sekitarnya. Dikelola oleh KAI, LRT menghubungkan pusat kota Jakarta dengan Bogor, Depok, dan Bekasi melalui jalur terintegrasi.</p>
+                    <p>Jaringan LRT yang <span class="highlight-blue">terus berkembang</span> menawarkan perjalanan cepat dengan tarif terjangkau. Cocok untuk Anda yang ingin bepergian tanpa khawatir macet.</p>
+                    <p>LRT melayani <span class="highlight-pink">rute strategis</span> seperti Jakarta-Bogor dan Jakarta-Bekasi, dengan stasiun modern dan nyaman.</p>
+                    <p><span class="highlight-blue">Rute baru</span> terus ditambahkan untuk mendukung mobilitas urban yang lebih baik!</p>
+                </div>
+                <div class="map-container">
+                    <img src="images/lrt-map.jpg" alt="Peta Rute LRT">
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h1 class="section-title">Rasakan MRT Jakarta dengan KAI</h1>
+            <div class="two-column">
+                <div class="map-container">
+                    <img src="images/mrt-map.jpg" alt="Peta Rute MRT">
+                </div>
+                <div class="text-content">
+                    <p>MRT Jakarta, bagian dari sistem transportasi KAI, adalah terobosan untuk mobilitas cepat di ibu kota Indonesia. Fase awal menghubungkan Lebak Bulus ke Bundaran HI, dengan rencana ekspansi ke rute lain.</p>
+                    <p>Dengan <span class="highlight-pink">kualitas layanan premium</span>, MRT menawarkan tempat duduk nyaman, AC, dan tarif progresif yang terjangkau berdasarkan jarak tempuh.</p>
+                    <p>Layanan <span class="highlight-blue">sederhana dan efisien</span> memastikan waktu tempuh singkat, cocok untuk pekerja dan pelancong di Jakarta.</p>
+                    <p>MRT Jakarta membuat perjalanan kota lebih mudah dan hemat!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="images/kai-logo.png" alt="Logo KAI">
+                <p>PT Kereta Api Indonesia (Persero) - Menghubungkan Indonesia dengan layanan transportasi kereta api yang aman, nyaman, dan terjangkau.</p>
+            </div>
+            <div class="footer-nav">
+                <h4>Navigasi</h4>
+                <ul>
+                    <li><a href="#" aria-label="Tentang KAI">Tentang Kami</a></li>
+                    <li><a href="#" aria-label="Layanan KAI">Layanan</a></li>
+                    <li><a href="#" aria-label="Kontak KAI">Kontak</a></li>
+                    <li><a href="#" aria-label="Kebijakan Privasi KAI">Kebijakan Privasi</a></li>
+                    <li><a href="#" aria-label="Syarat dan Ketentuan KAI">Syarat & Ketentuan</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Ikuti Kami</h4>
+                <div class="social-icons">
+                    <a href="https://facebook.com" aria-label="Facebook KAI"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com" aria-label="Twitter KAI"><i class="fab fa-twitter"></i></a>
+                    <a href="https://instagram.com" aria-label="Instagram KAI"><i class="fab fa-instagram"></i></a>
+                    <a href="https://youtube.com" aria-label="YouTube KAI"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 PT Kereta Api Indonesia (Persero). All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let tripType = 'oneway';
+
+        function setTripType(type) {
+            tripType = type;
+            document.querySelectorAll('.trip-btn').forEach(btn => {
+                btn.classList.r emove('active');
+                btn.setAttribute('aria-checked', 'false');
+            });
+            event.target.classList.add('active');
+            event.target.setAttribute('aria-checked', 'true');
+        }
+
+        function togglePassengers() {
+            alert('Klik cari tiket termurah untuk mencari tiket terbaik!');
+        }
+    </script>
+</body>
+</html>

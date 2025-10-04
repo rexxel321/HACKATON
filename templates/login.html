@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PT KAI - Login & Register</title>
+    <!-- Memuat Font Inter dan Font Awesome untuk Ikon -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* Define KAI colors for consistency */
+        :root {
+            --kai-blue: #003087;
+            --kai-yellow: #FFC107;
+            --font-color: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif; /* Menggunakan font Inter yang modern */
+            background: #f0f4f8; /* Latar belakang abu-abu muda yang lembut */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 48, 135, 0.15); /* Bayangan lebih halus */
+            width: 100%;
+            max-width: 450px; /* Ukuran yang sedikit lebih besar */
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Header yang diperbarui --- */
+        .header {
+            /* Gradient Biru KAI yang lebih bersih dan profesional */
+            background: linear-gradient(135deg, var(--kai-blue) 0%, #0047ab 100%);
+            color: white;
+            padding: 45px 30px 30px; 
+            text-align: center;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .logo-icon {
+            font-size: 48px; /* Ikon kereta yang besar */
+            margin-bottom: 10px;
+            color: var(--kai-yellow); /* Aksen kuning KAI */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 800; /* Lebih tebal */
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        /* --- Akhir Header yang diperbarui --- */
+
+        .tabs {
+            display: flex;
+            background-color: #fcfcfc;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab.active {
+            color: var(--kai-blue);
+            background-color: white;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            /* Gradient aktif Biru-Kuning KAI */
+            background: linear-gradient(to right, var(--kai-blue), var(--kai-yellow));
+        }
+
+        .tab:hover:not(.active) {
+            background-color: #f8f8f8;
+            color: var(--font-color);
+        }
+
+        .form-container {
+            padding: 35px 30px;
+        }
+
+        .form-content {
+            display: none;
+        }
+
+        .form-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--font-color);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--kai-blue);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(0, 48, 135, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--kai-blue) 0%, #0047ab 100%);
+            box-shadow: 0 6px 20px rgba(0, 48, 135, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 48, 135, 0.45);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 15px rgba(0, 48, 135, 0.3);
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: -15px;
+            margin-bottom: 15px;
+        }
+
+        .forgot-password a {
+            color: var(--kai-blue);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .forgot-password a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        .info-text {
+            text-align: center;
+            color: #6c757d;
+            font-size: 13px;
+            margin-top: 25px;
+            line-height: 1.5;
+        }
+        
+        /* Message Box Style (Pengganti alert()) */
+        .message-box {
+            text-align: center;
+            padding: 12px 20px;
+            margin: 0 auto 15px auto;
+            font-weight: 600;
+            border-radius: 8px;
+            opacity: 0; /* Tersembunyi secara default */
+            height: 0;
+            overflow: hidden;
+            transition: opacity 0.3s ease, background-color 0.3s ease, height 0.3s ease;
+            max-width: 90%;
+            font-size: 14px;
+        }
+        .message-box.active {
+            opacity: 1;
+            height: auto; /* Memastikan kotak pesan terlihat */
+            padding: 12px 20px;
+        }
+
+        .message-box.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message-box.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+                box-shadow: none;
+                min-height: 100vh;
+            }
+            body {
+                padding: 0;
+            }
+            .header {
+                border-radius: 0;
+            }
+            .form-container {
+                padding: 30px 20px;
+            }
+            .logo-icon {
+                font-size: 40px;
+            }
+            .logo {
+                font-size: 26px;
+            }
+            .tab {
+                padding: 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <i class="fas fa-train logo-icon"></i>
+            <div class="logo">KAI Access</div>
+            <div class="subtitle">Masuk atau Daftar untuk Layanan Perjalanan Kereta Api Anda</div>
+        </div>
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('login')">Masuk</button>
+            <button class="tab" onclick="switchTab('register')">Daftar</button>
+        </div>
+        
+        <div id="global-message" class="message-box"></div> <!-- Kotak pesan global -->
+
+        <div class="form-container">
+            <div id="login-form" class="form-content active">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="login-username">Username atau Email</label>
+                        <input type="text" id="login-username" name="username" placeholder="Masukkan username atau email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" name="password" placeholder="Masukkan password Anda" required>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="#" aria-label="Lupa password">Lupa password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Masuk ke Akun</button>
+                </form>
+                <div class="info-text">
+                    Belum punya akun? Klik tab "Daftar" di atas untuk membuat akun baru.
+                </div>
+            </div>
+            <div id="register-form" class="form-content">
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="register-name">Nama Lengkap</label>
+                        <input type="text" id="register-name" name="name" placeholder="Nama sesuai identitas" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" name="email" placeholder="contoh@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-username">Username</label>
+                        <input type="text" id="register-username" name="username" placeholder="Buat username unik" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" name="password" placeholder="Buat password minimal 6 karakter" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm">Konfirmasi Password</label>
+                        <input type="password" id="register-confirm" name="confirm" placeholder="Ulangi password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Daftar Sekarang</button>
+                </form>
+                <div class="info-text">
+                    Sudah punya akun? Klik tab "Masuk" di atas untuk login.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk menampilkan pesan (menggantikan alert())
+        function showMessage(message, type = 'success') {
+            const box = document.getElementById('global-message');
+            // Reset kelas dan teks sebelumnya
+            box.className = 'message-box';
+            box.textContent = ''; 
+            
+            // Set pesan dan kelas baru
+            box.textContent = message;
+            box.classList.add('active', type);
+
+            // Sembunyikan pesan setelah 5 detik
+            setTimeout(() => {
+                box.classList.remove('active');
+            }, 5000);
+        }
+
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.tab');
+            const forms = document.querySelectorAll('.form-content');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            forms.forEach(f => f.classList.remove('active'));
+            
+            // Sembunyikan pesan saat tab berpindah
+            document.getElementById('global-message').classList.remove('active');
+
+
+            if (tab === 'login') {
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+                document.getElementById('login-form').classList.add('active');
+            } else {
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+                document.getElementById('register-form').classList.add('active');
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            // Menggunakan showMessage()
+            showMessage(`Masuk berhasil! Selamat datang kembali, ${username}.`, 'success');
+            // Logika login autentikasi akan ditambahkan di sini
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const password = document.getElementById('register-password').value;
+            const confirm = document.getElementById('register-confirm').value;
+
+            if (password !== confirm) {
+                // Menggunakan showMessage() untuk error
+                showMessage('Password tidak cocok! Mohon periksa kembali konfirmasi password Anda.', 'error');
+                return;
+            }
+
+            const name = document.getElementById('register-name').value;
+            // Menggunakan showMessage()
+            showMessage(`Pendaftaran berhasil! Akun ${name} siap digunakan.`, 'success');
+            // Logika pendaftaran autentikasi akan ditambahkan di sini
+        }
+
+        // Tambahkan event listener untuk tab saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Ekstrak nama tab dari atribut onclick
+                    const tabName = tab.getAttribute('onclick').match(/'([^']+)'/)[1];
+                    switchTab(tabName);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
